@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // A simple client-side logic handled mostly by AuthContext and hooks in standard React
   // but we can block direct access to protected routes if no token exists in cookies.
   // Since we are using localStorage for simplicity, we won't strictly block here,

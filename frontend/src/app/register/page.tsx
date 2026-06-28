@@ -11,12 +11,15 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Logo } from '../../components/ui/Logo';
 import { CheckCircle2 } from 'lucide-react';
+import { MinimalBackendStatus } from '../../components/ui/MinimalBackendStatus';
+import { useBackendStatus } from '../../hooks/useBackendStatus';
 
 export default function RegisterPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
+  const { loading: backendLoading } = useBackendStatus();
 
   const onSubmit = async (data: any) => {
     try {
@@ -33,7 +36,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex bg-white dark:bg-[#0D0F12]">
+    <div id="auth-page" className="min-h-screen w-full flex bg-white dark:bg-[#0D0F12] relative">
       {/* Left Column - Form */}
       <div className="w-full lg:w-[45%] flex flex-col relative z-10 h-screen">
         
@@ -71,6 +74,7 @@ export default function RegisterPage() {
                 className="bg-[#F8F9FA] border-[#DADCE0] dark:bg-[#1A1D24] dark:border-[#393C41] h-12 rounded-[8px]"
                 {...register('name', { required: 'Name is required' })}
                 error={errors.name?.message as string}
+                disabled={backendLoading || isLoading}
               />
 
               <Input
@@ -81,6 +85,7 @@ export default function RegisterPage() {
                 className="bg-[#F8F9FA] border-[#DADCE0] dark:bg-[#1A1D24] dark:border-[#393C41] h-12 rounded-[8px]"
                 {...register('email', { required: 'Email is required' })}
                 error={errors.email?.message as string}
+                disabled={backendLoading || isLoading}
               />
               
               <Input
@@ -94,10 +99,16 @@ export default function RegisterPage() {
                   minLength: { value: 8, message: 'Must be at least 8 characters' }
                 })}
                 error={errors.password?.message as string}
+                disabled={backendLoading || isLoading}
               />
             </div>
 
-            <Button type="submit" className="w-full h-12 text-[15px] font-medium bg-[#1A73E8] hover:bg-[#1557B0] dark:bg-[#3E6AE1] dark:hover:bg-[#3256B7] rounded-[8px]" isLoading={isLoading}>
+            <Button 
+              type="submit" 
+              className="w-full h-12 text-[15px] font-medium bg-[#1A73E8] hover:bg-[#1557B0] dark:bg-[#3E6AE1] dark:hover:bg-[#3256B7] rounded-[8px]" 
+              isLoading={isLoading}
+              disabled={backendLoading}
+            >
               Sign up
             </Button>
           </form>
@@ -114,6 +125,7 @@ export default function RegisterPage() {
 
       {/* Right Column - Visual */}
       <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-black border-l border-[#DADCE0] dark:border-[#2C2E33]">
+        <MinimalBackendStatus className="absolute top-6 right-6 z-20 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white drop-shadow-md" />
         {/* Full Bleed User Provided Image */}
         <img 
           src="https://images.pexels.com/photos/9222427/pexels-photo-9222427.jpeg?_gl=1*udi42v*_ga*MTcwMTYwNzcxOS4xNzgyNjYxMDA4*_ga_8JE65Q40S6*czE3ODI2NjEwMDgkbzEkZzEkdDE3ODI2NjEwNzckajU5JGwwJGgw" 
